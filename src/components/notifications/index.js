@@ -31,6 +31,7 @@ import Gorush from "./Gorush.vue";
 import Alerta from "./Alerta.vue";
 import OneBot from "./OneBot.vue";
 import PushDeer from "./PushDeer.vue";
+import UMessenger from "./UMessenger.vue";
 
 /**
  * Manage all notification form.
@@ -71,6 +72,7 @@ const NotificationFormList = {
     "alerta": Alerta,
     "OneBot": OneBot,
     "PushDeer": PushDeer,
+    "Umessenger": UMessenger,
 };
 
 export default NotificationFormList;

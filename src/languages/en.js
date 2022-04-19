@@ -191,6 +191,8 @@ export default {
     "Bot Token": "Bot Token",
     wayToGetTelegramToken: "You can get a token from {0}.",
     "Chat ID": "Chat ID",
+    "U ID": "U ID",
+    "U Group": "U Group",
     supportTelegramChatID: "Support Direct Chat / Group / Channel's Chat ID",
     wayToGetTelegramChatID: "You can get your chat ID by sending a message to the bot and going to this URL to view the chat_id:",
     "YOUR BOT TOKEN HERE": "YOUR BOT TOKEN HERE",

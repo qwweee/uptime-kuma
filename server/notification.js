@@ -33,6 +33,7 @@ const Gorush = require("./notification-providers/gorush");
 const Alerta = require("./notification-providers/alerta");
 const OneBot = require("./notification-providers/onebot");
 const PushDeer = require("./notification-providers/pushdeer");
+const UMessenger = require("./notification-providers/umessenger");
 
 class Notification {
 
@@ -77,6 +78,7 @@ class Notification {
             new Alerta(),
             new OneBot(),
             new PushDeer(),
+            new UMessenger(),
         ];
 
         for (let item of list) {
@@ -104,7 +106,7 @@ class Notification {
         if (this.providerList[notification.type]) {
             return this.providerList[notification.type].send(notification, msg, monitorJSON, heartbeatJSON);
         } else {
-            throw new Error("Notification type is not supported");
+            throw new Error("Notification type is not supported " +  notification);
         }
     }
 
