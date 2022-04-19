@@ -84,7 +84,8 @@ class Monitor extends BeanModel {
             mqttUsername: this.mqttUsername,
             mqttPassword: this.mqttPassword,
             mqttTopic: this.mqttTopic,
-            mqttSuccessMessage: this.mqttSuccessMessage
+            mqttSuccessMessage: this.mqttSuccessMessage,
+            notificationCircle: this.notificationCircle,
         };
 
         if (includeSensitiveData) {
@@ -449,6 +450,12 @@ class Monitor extends BeanModel {
             log.debug("monitor", `[${this.name}] Check isImportant`);
             let isImportant = Monitor.isImportantBeat(isFirstBeat, previousBeat?.status, bean.status);
 
+            if ((previousBeat.circleCount + 1) === this.notificationCircle && bean.status === DOWN) {
+                isImportant = true;
+            }
+
+            bean.circleCount = (isFirstBeat) ? (bean.circleCount + 1) : (previousBeat.circleCount + 1);
+
             // Mark as important if status changed, ignore pending pings,
             // Don't notify if disrupted changes to up
             if (isImportant) {
@@ -464,6 +471,8 @@ class Monitor extends BeanModel {
             } else {
                 bean.important = false;
             }
+
+            bean.circleCount = (bean.circleCount % this.notificationCircle);
 
             if (bean.status === UP) {
                 log.info("monitor", `Monitor #${this.id} '${this.name}': Successful Response: ${bean.ping} ms | Interval: ${beatInterval} seconds | Type: ${this.type}`);
@@ -742,7 +751,7 @@ class Monitor extends BeanModel {
                 text = "🔴 Down";
             }
 
-            let msg = `[${monitor.name}] [${text}] ${bean.msg}`;
+            let msg = `[${monitor.name}] [${text}] ${bean.msg} circle count: ${bean.circleCount}, Response Time: ${bean.ping} ms`;
 
             for (let notification of notificationList) {
                 try {
