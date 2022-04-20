@@ -259,8 +259,10 @@ class Monitor extends BeanModel {
                             tlsInfo = await this.updateTlsInfo(tlsInfoObject);
 
                             if (!this.getIgnoreTls() && this.isEnabledExpiryNotification()) {
-                                log.debug("monitor", `[${this.name}] call sendCertNotification`);
-                                await this.sendCertNotification(tlsInfoObject);
+                                if ((previousBeat.circleCount + 1) === this.notificationCircle) {
+                                    log.debug("monitor", `[${this.name}] call sendCertNotification`);
+                                    await this.sendCertNotification(tlsInfoObject);
+                                }
                             }
 
                         } catch (e) {
@@ -776,13 +778,17 @@ class Monitor extends BeanModel {
             const notificationList = await Monitor.getNotificationList(this);
 
             log.debug("monitor", "call sendCertNotificationByTargetDays");
-            await this.sendCertNotificationByTargetDays(tlsInfoObject.certInfo.daysRemaining, 21, notificationList);
-            await this.sendCertNotificationByTargetDays(tlsInfoObject.certInfo.daysRemaining, 14, notificationList);
-            await this.sendCertNotificationByTargetDays(tlsInfoObject.certInfo.daysRemaining, 7, notificationList);
+            if (this.certificateLimit) {
+                await this.sendCertNotificationByTargetDays(tlsInfoObject.certInfo.daysRemaining, this.certificateLimit, notificationList, true);
+            } else {
+                await this.sendCertNotificationByTargetDays(tlsInfoObject.certInfo.daysRemaining, 21, notificationList);
+                await this.sendCertNotificationByTargetDays(tlsInfoObject.certInfo.daysRemaining, 14, notificationList);
+                await this.sendCertNotificationByTargetDays(tlsInfoObject.certInfo.daysRemaining, 7, notificationList);
+            }
         }
     }
 
-    async sendCertNotificationByTargetDays(daysRemaining, targetDays, notificationList) {
+    async sendCertNotificationByTargetDays(daysRemaining, targetDays, notificationList, isCircleNotification = false) {
 
         if (daysRemaining > targetDays) {
             log.debug("monitor", `No need to send cert notification. ${daysRemaining} > ${targetDays}`);
@@ -790,17 +796,18 @@ class Monitor extends BeanModel {
         }
 
         if (notificationList.length > 0) {
+            if(!isCircleNotification) {
+                let row = await R.getRow("SELECT * FROM notification_sent_history WHERE type = ? AND monitor_id = ? AND days = ?", [
+                    "certificate",
+                    this.id,
+                    targetDays,
+                ]);
 
-            let row = await R.getRow("SELECT * FROM notification_sent_history WHERE type = ? AND monitor_id = ? AND days = ?", [
-                "certificate",
-                this.id,
-                targetDays,
-            ]);
-
-            // Sent already, no need to send again
-            if (row) {
-                log.debug("monitor", "Sent already, no need to send again");
-                return;
+                // Sent already, no need to send again
+                if (row) {
+                    log.debug("monitor", "Sent already, no need to send again");
+                    return;
+                }
             }
 
             let sent = false;
