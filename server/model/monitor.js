@@ -86,6 +86,7 @@ class Monitor extends BeanModel {
             mqttTopic: this.mqttTopic,
             mqttSuccessMessage: this.mqttSuccessMessage,
             notificationCircle: this.notificationCircle,
+            certificateLimit: this.certificateLimit,
         };
 
         if (includeSensitiveData) {

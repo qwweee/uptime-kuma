@@ -50,6 +50,15 @@
                                 <input id="url" v-model="monitor.url" type="url" class="form-control" pattern="https?://.+" required>
                             </div>
 
+                            <!-- Certificate Limit -->
+                            <div class="my-3">
+                                <label for="certificateLimit" class="form-label">
+                                    {{ $t("Certificate Limit") }}
+                                    <span>({{ $t("Certificate Limit Days", [ monitor.certificateLimit ]) }})</span>
+                                </label>
+                                <input id="certificateLimit" v-model="monitor.certificateLimit" type="number" class="form-control" required min="7" step="1">
+                            </div>
+
                             <!-- Push URL -->
                             <div v-if="monitor.type === 'push' " class="my-3">
                                 <label for="push-url" class="form-label">{{ $t("PushUrl") }}</label>

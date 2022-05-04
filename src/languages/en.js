@@ -463,4 +463,6 @@ export default {
     "PushDeer Key": "PushDeer Key",
     "Notification Circle": "Notification Circle",
     "Resend Notification Circle Times": "Resend Notification Per {0} minutes",
+    "Certificate Limit": "Certificate Limit",
+    "Certificate Limit Days": "Certificate Limit {0} days",
 };

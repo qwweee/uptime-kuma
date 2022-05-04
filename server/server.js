@@ -688,6 +688,7 @@ try {
                 bean.mqttTopic = monitor.mqttTopic;
                 bean.mqttSuccessMessage = monitor.mqttSuccessMessage;
                 bean.notificationCircle = monitor.notificationCircle;
+                bean.certificateLimit = monitor.certificateLimit;
 
                 await R.store(bean);
 
