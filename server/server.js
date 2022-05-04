@@ -687,6 +687,7 @@ try {
                 bean.mqttPassword = monitor.mqttPassword;
                 bean.mqttTopic = monitor.mqttTopic;
                 bean.mqttSuccessMessage = monitor.mqttSuccessMessage;
+                bean.notificationCircle = monitor.notificationCircle;
 
                 await R.store(bean);
 

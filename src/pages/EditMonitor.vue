@@ -170,6 +170,15 @@
                                 <input id="retry-interval" v-model="monitor.retryInterval" type="number" class="form-control" required min="20" step="1">
                             </div>
 
+                            <!-- Notification Circle -->
+                            <div class="my-3">
+                                <label for="notificationCircle" class="form-label">
+                                    {{ $t("Notification Circle") }}
+                                    <span>({{ $t("Resend Notification Circle Times", [ (monitor.retryInterval * monitor.notificationCircle / 60).toFixed(2) ]) }})</span>
+                                </label>
+                                <input id="notificationCircle" v-model="monitor.notificationCircle" type="number" class="form-control" required min="10" step="1">
+                            </div>
+
                             <h2 v-if="monitor.type !== 'push'" class="mt-5 mb-2">{{ $t("Advanced") }}</h2>
 
                             <div v-if="monitor.type === 'http' || monitor.type === 'keyword' " class="my-3 form-check">

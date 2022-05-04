@@ -461,4 +461,6 @@ export default {
     onebotUserOrGroupId: "Group/User ID",
     onebotSafetyTips: "For safety, must set access token",
     "PushDeer Key": "PushDeer Key",
+    "Notification Circle": "Notification Circle",
+    "Resend Notification Circle Times": "Resend Notification Per {0} minutes",
 };
