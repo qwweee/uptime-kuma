@@ -87,6 +87,7 @@ class Monitor extends BeanModel {
             mqttSuccessMessage: this.mqttSuccessMessage,
             notificationCircle: this.notificationCircle,
             certificateLimit: this.certificateLimit,
+            responseTimeLimit: this.responseTimeLimit,
         };
 
         if (includeSensitiveData) {
@@ -450,6 +451,11 @@ class Monitor extends BeanModel {
                 }
             }
 
+            let isResponseTimeOver = (bean.ping > this.responseTimeLimit) && this.responseTimeLimit > 0;
+            if (isResponseTimeOver) {
+                bean.status = DOWN;
+            }
+
             log.debug("monitor", `[${this.name}] Check isImportant`);
             let isImportant = Monitor.isImportantBeat(isFirstBeat, previousBeat?.status, bean.status);
 
@@ -465,7 +471,7 @@ class Monitor extends BeanModel {
                 bean.important = true;
 
                 log.debug("monitor", `[${this.name}] sendNotification`);
-                await Monitor.sendNotification(isFirstBeat, this, bean);
+                await Monitor.sendNotification(isFirstBeat, this, bean, isResponseTimeOver);
 
                 // Clear Status Page Cache
                 log.debug("monitor", `[${this.name}] apicache clear`);
@@ -743,7 +749,7 @@ class Monitor extends BeanModel {
         return isImportant;
     }
 
-    static async sendNotification(isFirstBeat, monitor, bean) {
+    static async sendNotification(isFirstBeat, monitor, bean, isResponseTimeOver) {
         if (!isFirstBeat || bean.status === DOWN) {
             const notificationList = await Monitor.getNotificationList(monitor);
 
@@ -754,7 +760,13 @@ class Monitor extends BeanModel {
                 text = "🔴 Down";
             }
 
-            let msg = `[${monitor.name}] [${text}] ${bean.msg} circle count: ${bean.circleCount}, Response Time: ${bean.ping} ms`;
+            let msg = `[${monitor.name}] [${text}] ${bean.msg} circle count: ${bean.circleCount}, `;
+
+            if (isResponseTimeOver) {
+                msg = `${msg}Response Time: ${bean.ping} ms > ${monitor.responseTimeLimit} ms`;
+            } else {
+                msg = `${msg}Response Time: ${bean.ping} ms`;
+            }
 
             for (let notification of notificationList) {
                 try {

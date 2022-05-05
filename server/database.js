@@ -59,6 +59,7 @@ class Database {
         "patch-status-page-footer-css.sql": true,
         "patch-added-mqtt-monitor.sql": true,
         "patch-added-circle-notification.sql": true,
+        "patch-added-response-time-limit.sql": true,
     }
 
     /**
