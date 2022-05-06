@@ -463,7 +463,11 @@ class Monitor extends BeanModel {
                 isImportant = true;
             }
 
-            bean.circleCount = (isFirstBeat) ? (bean.circleCount + 1) : (previousBeat.circleCount + 1);
+            if (isImportant) {
+                bean.circleCount = 0;
+            } else {
+                bean.circleCount = (isFirstBeat) ? (bean.circleCount + 1) : (previousBeat.circleCount + 1);
+            }
 
             // Mark as important if status changed, ignore pending pings,
             // Don't notify if disrupted changes to up
