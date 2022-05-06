@@ -188,6 +188,15 @@
                                 <input id="notificationCircle" v-model="monitor.notificationCircle" type="number" class="form-control" required min="10" step="1">
                             </div>
 
+                            <!-- Response Time Limitation -->
+                            <div class="my-3">
+                                <label for="responseTimeLimit" class="form-label">
+                                    {{ $t("Response Time Limit") }}
+                                    <span>({{ $t("Response Time Limit Detail", [ monitor.responseTimeLimit ]) }})</span>
+                                </label>
+                                <input id="responseTimeLimit" v-model="monitor.responseTimeLimit" type="number" class="form-control" required min="0" step="1">
+                            </div>
+
                             <h2 v-if="monitor.type !== 'push'" class="mt-5 mb-2">{{ $t("Advanced") }}</h2>
 
                             <div v-if="monitor.type === 'http' || monitor.type === 'keyword' " class="my-3 form-check">

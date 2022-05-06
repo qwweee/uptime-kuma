@@ -465,4 +465,6 @@ export default {
     "Resend Notification Circle Times": "Resend Notification Per {0} minutes",
     "Certificate Limit": "Certificate Limit",
     "Certificate Limit Days": "Certificate Limit {0} days",
+    "Response Time Limit": "Response Time Limit",
+    "Response Time Limit Detail": "Response Time Limit {0} ms",
 };
