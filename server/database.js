@@ -60,6 +60,7 @@ class Database {
         "patch-added-mqtt-monitor.sql": true,
         "patch-added-circle-notification.sql": true,
         "patch-added-response-time-limit.sql": true,
+        "patch-added-certificate-limit.sql": true,
     }
 
     /**
